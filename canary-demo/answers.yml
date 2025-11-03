@@ -1,53 +1,53 @@
 # Deployment Information
 pods_status:
-  main_pods_running: #TODO: Enter number of main pods running
-  canary_pods_running: #TODO: Enter number of canary pods running
+  main_pods_running: 3
+  canary_pods_running: 1 #Based on one of the names having "canary" in it twice
 
 # Service Information
 service_endpoints:
-  main_service_cluster_ip: #TODO: Enter the ClusterIP of main service
-  canary_service_cluster_ip: #TODO: Enter the ClusterIP of canary service
+  main_service_cluster_ip: 10.96.0.1
+  canary_service_cluster_ip: 10.103.42.77 #If this is the wrong one please let me know
 
 # Ingress Information
 ingress_details:
-  address: #TODO: Enter the Ingress controller IP address
-  host: #TODO: Enter the configured host (should be canary-demo.local)
+  address: 192.168.49.2
+  host: canary-demo.local
 
 # Metrics
 main_deployment_metrics:
-  http_requests_total: #TODO: Enter the value from main deployment's /metrics endpoint
-  process_cpu_seconds_total: #TODO: Enter the CPU seconds from main deployment
-  process_resident_memory_bytes: #TODO: Enter the memory usage from main deployment
+  http_requests_total: 117 #If you count both the 200+404 from the metrics
+  process_cpu_seconds_total: 0.7100000000000001
+  process_resident_memory_bytes: 3.3984512e+07
 
 canary_deployment_metrics:
-  http_requests_total: #TODO: Enter the value from canary deployment's /metrics endpoint
-  process_cpu_seconds_total: #TODO: Enter the CPU seconds from canary deployment
-  process_resident_memory_bytes: #TODO: Enter the memory usage from canary deployment
+  http_requests_total: 119 #If you count both the 200+404
+  process_cpu_seconds_total: 0.81
+  process_resident_memory_bytes: 3.383296e+07
 
 # Traffic Distribution Test
 traffic_test_results:
-  total_requests_sent: #TODO: Enter how many test requests you sent (should be 20)
-  main_responses_received: #TODO: Enter how many responses were from main deployment
-  canary_responses_received: #TODO: Enter how many responses were from canary deployment
-  actual_canary_percentage: #TODO: Calculate the actual percentage of canary traffic
+  total_requests_sent: 20
+  main_responses_received: 18
+  canary_responses_received: 2
+  actual_canary_percentage: 10%
 
 # Prometheus Queries
 prometheus_metrics:
-  main_request_rate: #TODO: Enter the result of rate(http_requests_total{version="v1"}[5m])
-  canary_request_rate: #TODO: Enter the result of rate(http_requests_total{version="v2"}[5m])
+  main_request_rate: 0.1000
+  canary_request_rate: 0.0333
 
 # Rollback Test
 rollback_test:
-  previous_revision: #TODO: Enter the revision number before rollback
-  rollback_command_used: #TODO: Enter the helm rollback command you used
-  time_to_rollback_seconds: #TODO: Enter how long the rollback took to complete
+  previous_revision: 1
+  rollback_command_used: helm rollback canary-demo 1 -n canary-demo
+  time_to_rollback_seconds: 90 #approximately given I self port forwarded the connection before stabilization
 
 # Error Budget Calculation (based on 99.9% SLO)
 error_budget:
-  monthly_error_budget_seconds: #TODO: Calculate and enter the monthly error budget in seconds
-  remaining_error_budget_percentage: #TODO: Enter current remaining error budget percentage
+  monthly_error_budget_seconds: 2592
+  remaining_error_budget_percentage: 100.00
 
 # Additional Observations
 observations:
-  unexpected_behaviors: #TODO: List any unexpected behaviors you observed
-  suggested_improvements: #TODO: List any improvements you would suggest
+  unexpected_behaviors: #Had to run a custom command to get the admin password for Grafana
+  suggested_improvements: #Configure Grafana properly. Little more explanation on how to do the Panels, UI is complicated for first-timers.
